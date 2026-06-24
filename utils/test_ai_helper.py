@@ -11,6 +11,11 @@ def test_get_ai_suggestion_handles_timeout():
     assert "Increase wait time" in suggestion
 
 
+def test_get_ai_suggestion_handles_invalid_login():
+    suggestion = get_ai_suggestion("invalid password")
+    assert "invalid credentials" in suggestion.lower()
+
+
 def test_get_ai_suggestion_handles_unknown_error():
     suggestion = get_ai_suggestion("RandomError")
     assert "Analyze logs" in suggestion

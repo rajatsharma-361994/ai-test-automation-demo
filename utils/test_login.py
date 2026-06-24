@@ -1,4 +1,5 @@
 import pytest
+import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -11,7 +12,7 @@ from utils.ai_helper import get_ai_suggestion
 
 LOGIN_URL = "https://the-internet.herokuapp.com/login"
 USERNAME = "tomsmith"
-PASSWORD = "SuperSecretPassword!"
+PASSWORD = "SuperSecretPassword!"   
 
 
 @pytest.fixture
@@ -41,5 +42,14 @@ def test_login_success(driver):
         assert "You logged into a secure area!" in success_msg
 
     except Exception as e:
+        screenshot_path = f"screenshots/failure_{int(time.time())}.png"
+        driver.save_screenshot(screenshot_path)
+
+        
         suggestion = get_ai_suggestion(str(e))
-        pytest.fail(f"Test failed.\nAI Suggestion:\n{suggestion}")
+
+        pytest.fail(
+            f"Test failed.\n"
+            f"Screenshot: {screenshot_path}\n"
+            f"AI Suggestion:\n{suggestion}"
+        )

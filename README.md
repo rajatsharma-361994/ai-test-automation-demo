@@ -21,6 +21,13 @@ AI is used to analyze errors and suggest fixes:
 - Timeout issues
 - General debugging suggestions
 
+## Future Enhancements
+- OpenAI / LLM integration
+- Screenshot capture on failure
+- GitHub Actions CI/CD pipeline
+- Page Object Model implementation
+- Self-healing locator strategy
+
 ## Run Instructions
 
 ```bash

@@ -9,7 +9,7 @@ It showcases how intelligent insights can be integrated into automation workflow
 ---
 
 ## Project Tree
-
+```
 📦 ai-test-automation-demo
 │
 ├── README.md
@@ -28,7 +28,7 @@ It showcases how intelligent insights can be integrated into automation workflow
 │
 └── utils
     └── __init__.py
-
+```
 
 ## Features
 

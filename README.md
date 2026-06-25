@@ -8,6 +8,28 @@ It showcases how intelligent insights can be integrated into automation workflow
 
 ---
 
+## Project Tree
+
+📦 ai-test-automation-demo
+│
+├── README.md
+├── conftest.py
+├── pytest_ai_analyzer_plugin.py
+│
+├── ai-analysis
+│   ├── ai_failure_analysis.json
+│   └── ai_failure_analysis.txt
+│
+├── screenshots
+│   └── failure.png
+│
+├── tests
+│   └── test_login.py
+│
+└── utils
+    └── __init__.py
+
+
 ## Features
 
 * UI automation using Selenium WebDriver
@@ -51,4 +73,7 @@ pytest --ai-analyze
 ```
 
 When a test fails, the framework will capture the failure, send it to the analyzer, and print a concise AI summary in the test output. Reports are written to the ai-analysis directory.
+
+
+
 

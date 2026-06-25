@@ -1,5 +1,7 @@
-import pytest
+import inspect
 import time
+
+import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -7,12 +9,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
-from utils.ai_helper import get_ai_suggestion
+from ai_test_analyzer import AITestAnalyzer
 
 
 LOGIN_URL = "https://the-internet.herokuapp.com/login"
-USERNAME = "tomsmith"
-PASSWORD = "SuperSecretPassword!"   
+USERNAME = "tomsmith001"
+PASSWORD = "SuperSecretPassword!"
 
 
 @pytest.fixture
@@ -23,7 +25,7 @@ def driver():
     driver.quit()
 
 
-def test_login_success(driver):
+def test_login_success(driver, request):
     driver.get(LOGIN_URL)
 
     try:
@@ -45,11 +47,26 @@ def test_login_success(driver):
         screenshot_path = f"screenshots/failure_{int(time.time())}.png"
         driver.save_screenshot(screenshot_path)
 
-        
-        suggestion = get_ai_suggestion(str(e))
+        ai_message = ""
+        if request.config.getoption("--ai-analyze", default=False):
+            analyzer = AITestAnalyzer()
+            if analyzer.is_available():
+                analysis = analyzer.analyze_failure(
+                    test_name="tests/test_login.py::test_login_success",
+                    error_message=str(e),
+                    traceback=str(e),
+                    test_code=inspect.getsource(test_login_success),
+                    context={"screenshot": screenshot_path},
+                )
+                if analysis:
+                    ai_message = (
+                        f"\nAI Analysis:\n"
+                        f"Failure Type: {analysis.failure_type}\n"
+                        f"Root Cause: {analysis.root_cause}\n"
+                        f"Suggested Fix:\n{analysis.suggested_fix}"
+                    )
 
         pytest.fail(
             f"Test failed.\n"
-            f"Screenshot: {screenshot_path}\n"
-            f"AI Suggestion:\n{suggestion}"
+            f"Screenshot: {screenshot_path}{ai_message}"
         )
